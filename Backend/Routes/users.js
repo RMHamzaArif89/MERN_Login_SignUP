@@ -37,7 +37,23 @@ router.post('/signup',async(req,res)=>{
 })
 
 
-router.get('/sign_up',(req,res)=>{
+router.get('/login',(req,res)=>{
+  try{
+    const email=req.body.email;
+    const password=req.body.password;
+    const data= UserDetail.findOne({email})
+    const data2=UserDetail.findOne({password})
+
+    if(data && data2){
+res.status(201).send('login')
+        
+    }else{
+        res.status(400).send('invalid login details')
+    }
+  }
+  catch(e){
+    res.status(400).send(e)
+  }
     
 })
 
