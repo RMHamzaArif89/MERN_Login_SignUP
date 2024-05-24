@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Sign_up() {
     const [values,setValues]=useState({
@@ -8,6 +9,8 @@ function Sign_up() {
         password:''
 
     })
+
+    const navigate=useNavigate()
 
     const handleChange=(e)=>{
         // e.preventDefault()
@@ -44,6 +47,7 @@ console.log(response)
     email:'',
     password:''
 })
+navigate('/login')
  }
     }
 

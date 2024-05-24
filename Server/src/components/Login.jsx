@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
+
 
 function Login() {
     const [values,setValues]=useState({
@@ -6,6 +8,7 @@ function Login() {
         password:''
 
     })
+    const navigate=useNavigate()
 
     const handleChange=(e)=>{
         // e.preventDefault()
@@ -23,11 +26,11 @@ function Login() {
     }
 
     const handleLogin=async(e)=>{
-      console.log('login')
+      console.log('login',values)
       e.preventDefault();
  try{
   const response=await fetch('http://localhost:5000/api/user/login',{
-    method:'GET',
+    method:'POST',
     headers:{
   "Content-Type":'application/json'
     },
@@ -40,6 +43,10 @@ console.log(response)
     email:'',
     password:''
 })
+console.log('ok')
+navigate("/home")
+ }else{
+    console.log('login error')
  }
     }
 
