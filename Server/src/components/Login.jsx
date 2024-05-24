@@ -43,7 +43,7 @@ console.log(response)
     email:'',
     password:''
 })
-console.log('ok')
+console.log(response.token)
 navigate("/home")
  }else{
     console.log('login error')

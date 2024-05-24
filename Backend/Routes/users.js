@@ -2,6 +2,9 @@ const express=require('express')
 const router=express.Router()
 const UserDetail=require('../model/userSchema')
 const bodyParser=require('body-parser')
+const bcrypt=require('bcryptjs')
+const jwt=require('jsonwebtoken')
+const cookieParser=require('cookie-parser')
 // In this way
 
 
@@ -9,6 +12,7 @@ const bodyParser=require('body-parser')
 //this is middleWare use to encode the form&body request value //example req.body from form
 router.use(bodyParser.urlencoded({extended:false}));
 router.use(express.json())
+router.use(cookieParser())
 
 
 
@@ -25,14 +29,16 @@ router.post('/signup',async(req,res)=>{
         })
         //or simply second method
        // const userData=new userSchema(req.body)
-        
-        await UserDetail.create(userData)
-      return  res.status(200).json(userData)
+      //  const token= await userData.generateToken()
+       const create= await UserDetail.create(userData)
+     if(create){
+      return   res.status(200).json(userData)
+     }
         
     }
    
     catch(err){
-    return  res.send(err)
+    return  res.status(400).json('false')
     }
 })
 
@@ -43,11 +49,16 @@ router.post('/login',async(req,res)=>{
     const password=req.body.password;
     const data= await UserDetail.findOne({email:email})
 
-    const data2=await UserDetail.findOne({password})
+   
+    const passwordMatch= await bcrypt.compare(password,data.password)
   
 
-    if(data && data2){
-return res.status(200).json('success')
+    if(passwordMatch){
+        
+        return res.status(200).json({
+          token:await data.generateToken(),
+          id:data._id.toString()
+        })
 console.log('okay')
         
     }else{
