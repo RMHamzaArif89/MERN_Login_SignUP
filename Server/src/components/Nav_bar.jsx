@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-
+import signUpContext from './contextApi/signup_context'
 function Nav_bar() {
+  const {isLogin}=useContext(signUpContext)
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
   <div className="container-fluid">
@@ -12,19 +13,27 @@ function Nav_bar() {
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         <li className="nav-item">
-        <Link to="/home">Home</Link>
+        <Link  className='nav-link'  to="/home">Home</Link>
         </li>
-        <li className="nav-item">
-        <Link to="/sign-up">sign-in</Link>
-        </li>
+      {
+        isLogin?
+      <li className="nav-item">
+      <Link  className='nav-link' to="/logout">logout</Link>
+      </li>
+      :
+      <>
+      <li className="nav-item">
+      <Link className='nav-link'  to="/sign_up">sign-in</Link>
+      </li>
+     
+      <li className="nav-item">
+      <Link className='nav-link'  to="/login">login</Link>
+      </li>
+     
+    </>
        
-        <li className="nav-item">
-        <Link to="/login">login</Link>
-        </li>
-       
-        <li className="nav-item">
-        <Link to="/logout">logout</Link>
-        </li>
+      }
+        
        
      
       </ul>

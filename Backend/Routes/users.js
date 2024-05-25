@@ -72,4 +72,49 @@ console.log('okay')
     
 })
 
+
+
+
+//Get the data
+router.get('/usersData',async(req,res)=>{
+ try{
+  let Data=await UserDetail.find({})
+  if(Data){
+    res.status(200).json({data:Data})
+
+  }
+ }
+ catch(e){
+  res.status(400).json({msg:e})
+ }
+
+})
+
+
+
+
+
+//Delete the data by id
+router.get('/delete/:id',async(req,res)=>{
+ try{
+  let _id=req.params.id
+  
+  let Data= await UserDetail.findOneAndDelete({_id})
+  res.status(200).json({msg:'success'})
+ }
+ catch(e){
+  res.status(200).json({
+    msg:e
+  })
+ }
+})
+
+
+
+
+
+
+
+ 
+
 module.exports=router;
