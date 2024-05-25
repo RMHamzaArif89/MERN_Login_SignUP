@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
+import signUpContext from './contextApi/signup_context'
 
 
 function Login() {
@@ -8,6 +9,8 @@ function Login() {
         password:''
 
     })
+
+    const {StoreTokenTLS}=useContext(signUpContext)
     const navigate=useNavigate()
 
     const handleChange=(e)=>{
@@ -38,6 +41,8 @@ function Login() {
 })
 console.log(response)
  if(response.ok){
+  const data= await response.json()
+  StoreTokenTLS(data.token)
   
   setValues({
     email:'',
