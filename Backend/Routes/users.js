@@ -78,11 +78,13 @@ console.log('okay')
 //Get the data
 router.get('/usersData',async(req,res)=>{
  try{
-  let Data=await UserDetail.find({})
+  let Data=await UserDetail.find({},{password:0})
   if(Data){
-    res.status(200).json({data:Data})
+   return  res.status(200).json({data:Data})
 
   }
+    return res.status(400).json('data not found')
+  
  }
  catch(e){
   res.status(400).json({msg:e})
@@ -95,12 +97,15 @@ router.get('/usersData',async(req,res)=>{
 
 
 //Delete the data by id
-router.get('/delete/:id',async(req,res)=>{
+router.delete('/deleteUser/:id',async(req,res)=>{
  try{
   let _id=req.params.id
   
-  let Data= await UserDetail.findOneAndDelete({_id})
-  res.status(200).json({msg:'success'})
+  await UserDetail.findByIdAndDelete({_id})
+  
+
+    res.status(200).json({msg:'success'})
+ 
  }
  catch(e){
   res.status(200).json({

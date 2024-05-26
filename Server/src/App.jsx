@@ -7,6 +7,7 @@ import Sign_up from './components/Sign_up'
 import Home from './components/home/Home'
 import Nav_bar from './components/Nav_bar';
 import Logout from './components/Logout';
+import Users from './components/Users'
 
 function App() {
 
@@ -19,7 +20,8 @@ function App() {
           {/* <Route index element={<Home />} /> */}
           <Route path="sign_up" element={<Sign_up />} />
           <Route path="login" element={<Login />} />
-          <Route path="home" element={<Home />} />
+          <Route path="home" element={<Home />} />       
+          <Route path="users" element={<Users/>} />       
           <Route path="logout" element={<Logout />} />
           {/* <Route path="*" element={<NoPage />} /> */}
        

@@ -27,12 +27,7 @@ const mernUser= new mongoose.Schema({
         // required:true
 
     },
-    tokens:[{
-        token:{
-            type:String,
-            // required:true
-        }
-    }]
+
     
 
 })
@@ -53,6 +48,9 @@ mernUser.pre("save", async function(next){
 //jsonwebtokengenerate
 mernUser.methods.generateToken=async function(){
     try{
+        // if(this.include(token)){
+        //     return 
+        // }
         const token=jwt.sign({_id:this._id},process.env.SECRET_KEY,{expiresIn:'60s'})
         
         // this.tokens=this.tokens.concat({token})

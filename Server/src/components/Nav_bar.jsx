@@ -15,6 +15,9 @@ function Nav_bar() {
         <li className="nav-item">
         <Link  className='nav-link'  to="/home">Home</Link>
         </li>
+        <li className="nav-item">
+        <Link  className='nav-link'  to="/users">Users</Link>
+        </li>
       {
         isLogin?
       <li className="nav-item">
