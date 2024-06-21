@@ -5,7 +5,8 @@ const bodyParser=require('body-parser')
 const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const cookieParser=require('cookie-parser')
-// In this way
+const authenticateToken=require('../jwtAuth')
+
 
 
 
@@ -19,8 +20,11 @@ router.use(cookieParser())
 
 router.post('/signup',async(req,res)=>{
  
-   
     try{
+      const emailExist=await UserDetail.findOne({email:req.body.email})
+      if(emailExist){
+        return  res.status(400).json('email already exist')
+      }
         const userData=new UserDetail({
             name:req.body.name,
             age:req.body.age,
@@ -29,10 +33,17 @@ router.post('/signup',async(req,res)=>{
         })
         //or simply second method
        // const userData=new userSchema(req.body)
-      //  const token= await userData.generateToken()
+       const token= await userData.generateToken()
+
        const create= await UserDetail.create(userData)
+       const options= {
+        httpOnly:true,
+        secure:true
+       }
      if(create){
-      return   res.status(200).json(userData)
+      return   res.status(200)
+      .cookie("accessToken", token,options)
+      .json(userData)
      }
         
     }
@@ -44,22 +55,39 @@ router.post('/signup',async(req,res)=>{
 
 
 router.post('/login',async(req,res)=>{
+  
   try{
     const email=req.body.email;
     const password=req.body.password;
+    console.log('login',password)
+    if(!email ||  !password){
+      return  res.status(400).json('please fill the form feilds')
+    }
     const data= await UserDetail.findOne({email:email})
+    if(!data){
+      console.log('not find data')
+      return  res.status(400).json('invalid login details')
+    }
 
    
     const passwordMatch= await bcrypt.compare(password,data.password)
-  
+    const token=data.generateToken()
+    const options= {
+      httpOnly:true,
+      secure:true
+     }
+     if(!passwordMatch){
+      console.log('not match pwd')
+     }
+
+   
 
     if(passwordMatch){
-        
-        return res.status(200).json({
-          token:await data.generateToken(),
-          id:data._id.toString()
+        console.log('password match')
+        return res.status(200).cookie("accessToken", token, options).json({
+          id:data._id
         })
-console.log('okay')
+// console.log('okay')
         
     }else{
       return  res.status(400).json('invalid login details')
@@ -99,16 +127,16 @@ router.get('/usersData',async(req,res)=>{
 //Delete the data by id
 router.delete('/deleteUser/:id',async(req,res)=>{
  try{
-  let _id=req.params.id
+  const _id=req.params.id
   
   await UserDetail.findByIdAndDelete({_id})
   
 
-    res.status(200).json({msg:'success'})
+   return res.status(200).json({msg:'success'})
  
  }
  catch(e){
-  res.status(200).json({
+  res.status(400).json({
     msg:e
   })
  }
