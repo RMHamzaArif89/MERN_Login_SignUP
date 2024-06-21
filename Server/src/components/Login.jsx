@@ -41,14 +41,11 @@ function Login() {
 })
 console.log(response)
  if(response.ok){
-  const data= await response.json()
-  StoreTokenTLS(data.token)
   
   setValues({
     email:'',
     password:''
 })
-console.log(response.token)
 navigate("/home")
  }else{
     console.log('login error')

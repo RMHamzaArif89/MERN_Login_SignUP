@@ -11,27 +11,27 @@ function Users() {
     },[])
 
 
-    const deleteUser=async(userId)=>{
-      try{
-        const response=await fetch( `http://localhost:5000/api/user/deleteUser/${userId}} `,{
-          method:'DELETE',
-          headers:{
-            "Content:Type":"applicatioin/json"
-          }
+    const deleteUser=async(id)=>{
       
-      })
-      const data=await response.json()
-       if(response.ok){
-      
-       console.log('delete user')
-       getData()
-      
-       }
-          }
-      
-        catch(e){
-          console.log('data not found',e)
-        }
+          try{
+            const response=await fetch(`http://localhost:5000/api/user/deleteUser/${id}`,{
+              method:'DELETE',
+              headers:{
+            "Content-Type":'application/json'
+              },
+              // body:JSON.stringify(values)
+          })
+          // console.log(response)
+          const data=await response.json()
+           if(response.ok){
+            
+           getData()
+           }
+              }
+          
+            catch(e){
+              console.log('signup',e)
+            }
       }
     
 
@@ -49,7 +49,7 @@ function Users() {
             <div className="users-name">{user.name}</div>
             <div className="users-email">{user.email}</div>
             <div className="users-age">{user.age}</div>
-            <div className="delete" onClick={()=>{deleteUser(user.name)}}>Delete</div>
+            <div className="delete" onClick={()=>deleteUser(user._id)}>Delete</div>
             </div>
            )
         })

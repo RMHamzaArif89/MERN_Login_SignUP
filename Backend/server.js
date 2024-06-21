@@ -4,6 +4,7 @@ const cors=require('cors')
 // const session=require('express-session')
 const bodyParser = require("body-parser");
 const userRoute=require('./Routes/users')
+const cookieParser=require('cookie-parser')
 
 
 
@@ -20,7 +21,7 @@ app.use(cors(corsOptions))
 //this is middleWare use to encode the form&body request value //example req.body from form
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.json())
-
+app.use(cookieParser())
 
 //require the db connection
 require('./db/connection.js')

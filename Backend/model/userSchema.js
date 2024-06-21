@@ -35,8 +35,8 @@ const mernUser= new mongoose.Schema({
 //hash password using bcrypt
 mernUser.pre("save", async function(next){
     if(this.isModified('password')){
-        this.password= await bcrypt.hash(this.password,10)
-        // console.log(this.password)
+        this.password=  await bcrypt.hash(this.password,10)
+        console.log('bcrypt password',this.password)
     }
     next()
 })
@@ -51,10 +51,9 @@ mernUser.methods.generateToken=async function(){
         // if(this.include(token)){
         //     return 
         // }
-        const token=jwt.sign({_id:this._id},process.env.SECRET_KEY,{expiresIn:'60s'})
+        const token= jwt.sign({_id:this._id},process.env.SECRET_KEY,{expiresIn:'60s'})
         
         // this.tokens=this.tokens.concat({token})
-        // await this.save()
         return token
         
     
