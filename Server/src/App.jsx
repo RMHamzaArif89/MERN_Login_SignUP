@@ -6,7 +6,7 @@ import './App.css'
 import Sign_up from './components/Sign_up'
 import Home from './components/home/Home'
 import Nav_bar from './components/Nav_bar';
-import Logout from './components/Logout';
+import Logout from './components/home/Logout';
 import Users from './components/Users'
 
 function App() {

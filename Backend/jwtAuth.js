@@ -3,15 +3,15 @@ require('dotenv').config()
 
 
 
-module.exports=authenticateToken=()=>{
+module.exports=authenticateToken=(req,res,next)=>{
 try{
     // const req.cookie
-    const token=req.header.token
+    const token=req.cookies.accessToken
 
 if(!token){
 return res.status(401).json({msg:'unauthorized'})
 }
-const user= jwt.verify(token, process.env.SECRET_KEY)
+const user= jwt.verify(token, process.env.TOKEN_SECRET_KEY)
 
 if(!user){
     return res.status(401).json({msg:'unauthorized'})

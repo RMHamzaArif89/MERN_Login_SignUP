@@ -51,10 +51,26 @@ mernUser.methods.generateToken=async function(){
         // if(this.include(token)){
         //     return 
         // }
-        const token= jwt.sign({_id:this._id},process.env.SECRET_KEY,{expiresIn:'60s'})
+        const token= jwt.sign({_id:this._id},process.env.TOKEN_SECRET_KEY, {expiresIn:'2m'})
         
         // this.tokens=this.tokens.concat({token})
         return token
+        
+    
+    } catch{
+res.send('error occur')
+    }
+}
+//jsonwebtokengenerate
+mernUser.methods.generateRefreshToken= async function(){
+    try{
+        // if(this.include(token)){
+        //     return 
+        // }
+        const refreshToken = jwt.sign({_id:this._id},process.env.REFRESH_TOKEN_SECRET_KEY, {expiresIn:'5m'})
+        
+        // this.tokens=this.tokens.concat({refreshTtoken})
+        return refreshToken
         
     
     } catch{

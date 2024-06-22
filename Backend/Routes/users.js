@@ -34,15 +34,19 @@ router.post('/signup',async(req,res)=>{
         //or simply second method
        // const userData=new userSchema(req.body)
        const token= await userData.generateToken()
+       const refreshToken= await userData.generateRefreshToken()
 
        const create= await UserDetail.create(userData)
        const options= {
         httpOnly:true,
-        secure:true
+        secure:true,
+        maxAge:100000,
+        sameSite:'strict'
        }
      if(create){
       return   res.status(200)
       .cookie("accessToken", token,options)
+      .cookie("refreshToken",refreshToken,options)
       .json(userData)
      }
         
@@ -54,7 +58,8 @@ router.post('/signup',async(req,res)=>{
 })
 
 
-router.post('/login',async(req,res)=>{
+router.post('/login', authenticateToken, async(req,res)=>{
+  // console.log('cookietoken',req.cookies.accessToken)
   
   try{
     const email=req.body.email;
@@ -71,10 +76,13 @@ router.post('/login',async(req,res)=>{
 
    
     const passwordMatch= await bcrypt.compare(password,data.password)
-    const token=data.generateToken()
+    const token=await data.generateToken()
+    const refreshToken= await data.generateRefreshToken()
     const options= {
       httpOnly:true,
-      secure:true
+      secure:true,
+      maxAge:300000,
+      sameSite:'strict'
      }
      if(!passwordMatch){
       console.log('not match pwd')
@@ -84,7 +92,10 @@ router.post('/login',async(req,res)=>{
 
     if(passwordMatch){
         console.log('password match')
-        return res.status(200).cookie("accessToken", token, options).json({
+        return res.status(200)
+        .cookie("accessToken", token, options)
+        .cookie("refreshToken",refreshToken,options)
+        .json({
           id:data._id
         })
 // console.log('okay')
@@ -104,7 +115,7 @@ router.post('/login',async(req,res)=>{
 
 
 //Get the data
-router.get('/usersData',async(req,res)=>{
+router.get('/usersData',authenticateToken, async(req,res)=>{
  try{
   let Data=await UserDetail.find({},{password:0})
   if(Data){
@@ -118,6 +129,31 @@ router.get('/usersData',async(req,res)=>{
   res.status(400).json({msg:e})
  }
 
+})
+
+//dynamicPage using the jwt authentiacation
+ router.get('/home', authenticateToken,async(req,res)=>{
+  try{
+    // const data=await UserDetail.findById(req.user._id)
+    return res.status(200).json('authenticate')
+
+  }
+  catch(err){
+    res.status(400).json({msg:err})
+  }
+
+})
+
+
+router.get('/logout', authenticateToken, async(req,res)=>{
+  try{
+   res.status(200).clearCookie('accessToken','refreshToken',{path:'/'}).json('logout')
+   
+  }
+  catch(err){
+    res.status(400).json({msg:err})
+  }
+  
 })
 
 

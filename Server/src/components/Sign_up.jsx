@@ -31,12 +31,17 @@ function Sign_up() {
       console.log('submit')
       e.preventDefault();
  try{
+  // fetch(url, {  
+  //   // ...
+    
+  // })
   const response=await fetch('http://localhost:5000/api/user/signup',{
     method:'POST',
     headers:{
   "Content-Type":'application/json'
     },
-    body:JSON.stringify(values)
+    body:JSON.stringify(values),
+    credentials: 'include'  
 })
 console.log(response)
  if(response.ok){

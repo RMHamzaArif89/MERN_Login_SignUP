@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './home.css'
 function Home() {
+    const navigate=useNavigate()
+    const authenticateHomePage=async()=>{
+        try{
+            const response=await fetch('http://localhost:5000/api/user/home',{
+              method:'GET',
+              headers:{
+            "Content-Type":'application/json'
+              },
+              credentials: 'include'  
+          })
+          console.log(response)
+           if(response.ok){
+            
+           
+          console.log('authorization home page')
+           }else{
+              console.log('login error')
+              navigate('/login')
+           }
+              }
+          
+            catch(e){
+              console.log('login error',e)
+            }
+    }
+    useEffect(()=>{
+ authenticateHomePage()
+    },[])
   return (
     <>
     
